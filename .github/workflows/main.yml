@@ -5,6 +5,9 @@ on:
 jobs:
     access_issue_info:
         runs-on: ubuntu-latest
+        env:
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ', ') }}
+        if: contains($ISSUE_LABELS, 'autocoder-bot')
         steps:
             - name: Checkout 
               uses: actions/checkout@v4
@@ -17,8 +20,7 @@ jobs:
                 REPOSITORY: $GITHUB_REPOSITORY
                 ISSUE_NUMBER: ${{ github.event.issue.number }}
                 OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-                ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ', ') }}
-              if: contains($ISSUE_LABELS, 'autocoder-bot')
+                
               run: ./scripts/script.sh ${{ GITHUB_TOKEN }} ${{ REPOSITORY }} ${{ ISSUE_NUMBER }} ${{ OPENAI_API_KEY }}
             - name: Upload Artifact
               uses: actions/upload-artifact@v3
