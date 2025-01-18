@@ -5,7 +5,7 @@ on:
 jobs:
     access_issue_info:
         runs-on: ubuntu-latest
-        if: contains(${{ join(github.event.issue.labels.*.name, ', ') }}, 'autocoder-bot')
+        if: contains(github.event.issue.labels.*.name, 'autocoder-bot')
         steps:
             - name: Checkout 
               uses: actions/checkout@v4
